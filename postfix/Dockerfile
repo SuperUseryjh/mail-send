@@ -3,9 +3,7 @@ FROM ubuntu:20.04
 LABEL maintainer="Your Name <your.email@example.com>"
 
 # Install Postfix and SASL2 for authentication
-RUN apt-get update && \
-    apt-get install -y postfix postfix-sasl procmail mailutils rsyslog && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update &&     apt-get install -y postfix libsasl2-modules procmail mailutils rsyslog &&     rm -rf /var/lib/apt/lists/*
 
 # Copy Postfix configuration
 COPY main.cf /etc/postfix/main.cf
