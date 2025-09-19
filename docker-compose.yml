@@ -7,7 +7,7 @@ services:
       - "8050:8050"
     volumes:
       - .:/app
-      - dash_data:/app/
+      - dash_data:/app/data # Mount dash_data to /app/data for database persistence
     environment:
       PYTHONUNBUFFERED: 1
       SECRET_KEY: your_very_secret_and_long_key_here # Replace with a strong secret key
@@ -43,8 +43,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - mail_api_data:/app/ # For any potential data, though SQLite is shared
-      - dash_data:/app/users.db # Mount the shared database volume
+      - dash_data:/app/data # Mount the shared database volume to /app/data
     environment:
       PYTHONUNBUFFERED: 1
       POSTFIX_HOST: postfix # The hostname of the postfix service in docker-compose
@@ -56,4 +55,3 @@ services:
 volumes:
   dash_data:
   postfix_data:
-  mail_api_data:

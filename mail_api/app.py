@@ -8,7 +8,7 @@ import os
 app = Flask(__name__)
 
 # Database configuration (same as Dash app)
-DATABASE_FILE = '/app/users.db' # Path inside the Docker container
+DATABASE_FILE = '/app/data/users.db' # Path inside the Docker container
 POSTFIX_HOST = os.environ.get('POSTFIX_HOST', 'postfix') # Hostname of the Postfix service in docker-compose
 POSTFIX_PORT = int(os.environ.get('POSTFIX_PORT', 25))
 

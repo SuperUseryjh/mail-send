@@ -2,7 +2,7 @@ import sqlite3
 import hashlib
 import os
 
-DATABASE_FILE = 'users.db'
+DATABASE_FILE = 'data/users.db'
 
 def init_db():
     """Initializes the SQLite database and creates the users and domains tables if they don't exist."""
