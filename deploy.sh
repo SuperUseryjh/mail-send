@@ -20,7 +20,7 @@ echo "已备份 docker-compose.yml 到 docker-compose.yml.bak"
 echo "--- 正在更新 docker-compose.yml 中的 EXPECTED_MX_RECORD_HOST ---"
 # 使用 sed 替换 EXPECTED_MX_RECORD_HOST 的值
 # 注意：这里假设 EXPECTED_MX_RECORD_HOST 的值是双引号括起来的字符串
-sed -i "s|EXPECTED_MX_RECORD_HOST: \"[^\"]*\"|EXPECTED_MX_RECORD_HOST: \"$PUBLIC_IP\"|" docker-compose.yml
+sed -i "s|EXPECTED_MX_RECORD_HOST: [^ #]*|EXPECTED_MX_RECORD_HOST: \"$PUBLIC_IP\"|" docker-compose.yml
 
 # 检查 sed 命令是否成功
 if [ $? -ne 0 ]; then
