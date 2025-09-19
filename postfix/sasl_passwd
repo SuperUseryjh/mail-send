@@ -1,0 +1,2 @@
+# This file will be populated by environment variables in docker-compose.yml
+# Example: [your.external.smtp.relay]:587    username:password

@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  dash_app:
+    build: .
+    ports:
+      - "8050:8050"
+    volumes:
+      - .:/app
+      - dash_data:/app/
+    environment:
+      PYTHONUNBUFFERED: 1
+      SECRET_KEY: your_very_secret_and_long_key_here # Replace with a strong secret key
+      EXPECTED_MX_RECORD_HOST: your.mailserver.com # Replace with your actual mail server hostname
+    command: gunicorn --bind 0.0.0.0:8050 app:server
+    depends_on:
+      - postfix # Ensure postfix starts before dash_app
+
+  postfix:
+    build: ./postfix
+    hostname: mail.example.com # Set a hostname for the mail server
+    environment:
+      RELAYHOST: [your.external.smtp.relay]:587 # Replace with your actual external SMTP relay host
+      SMTP_USERNAME: your_smtp_username # Replace with your SMTP username
+      SMTP_PASSWORD: your_smtp_password # Replace with your SMTP password
+    volumes:
+      - postfix_data:/var/lib/postfix # Persist Postfix data
+      - ./postfix/main.cf:/etc/postfix/main.cf:ro # Mount main.cf as read-only
+      - ./postfix/sasl_passwd:/etc/postfix/sasl_passwd
+    ports:
+      - "25:25" # Expose port 25 for external access if needed, otherwise remove
+    command: >
+      bash -c "
+        echo \"${RELAYHOST} ${SMTP_USERNAME}:${SMTP_PASSWORD}\" > /etc/postfix/sasl_passwd &&
+        postmap /etc/postfix/sasl_passwd &&
+        service rsyslog start &&
+        postfix start &&
+        tail -f /var/log/mail.log
+      "
+
+  mail_api:
+    build: ./mail_api
+    ports:
+      - "5000:5000"
+    volumes:
+      - mail_api_data:/app/ # For any potential data, though SQLite is shared
+      - dash_data:/app/users.db # Mount the shared database volume
+    environment:
+      PYTHONUNBUFFERED: 1
+      POSTFIX_HOST: postfix # The hostname of the postfix service in docker-compose
+      POSTFIX_PORT: 25
+    depends_on:
+      - postfix # Ensure postfix starts before mail_api
+      - dash_app # Ensure dash_app (and its database init) starts before mail_api
+
+volumes:
+  dash_data:
+  postfix_data:
+  mail_api_data:

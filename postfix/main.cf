@@ -1,0 +1,28 @@
+# See /usr/share/postfix/main.cf.dist for a commented, more complete version
+
+
+# General settings
+myhostname = mail.example.com
+mydomain = example.com
+myorigin = $mydomain
+
+# Network settings
+inet_interfaces = all
+inet_protocols = ipv4
+mynetworks = 127.0.0.0/8 172.16.0.0/12 192.168.0.0/16 # Allow Docker internal networks
+
+# Relayhost configuration (replace with your actual relay host)
+# For example, if using Gmail: [smtp.gmail.com]:587
+relayhost = [your.external.smtp.relay]:587
+
+# SASL authentication for relayhost (if required by your relay)
+smtp_sasl_auth_enable = yes
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+smtp_sasl_security_options = noanonymous
+smtp_tls_security_level = may
+smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
+
+# Other settings
+mailbox_size_limit = 0
+recipient_delimiter = +
+home_mailbox = Maildir/
