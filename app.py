@@ -73,6 +73,18 @@ dashboard_layout = dbc.Container([
             html.Div(id="api-key-output", className="mt-3"),
             html.Hr(),
             html.H4("域名管理"),
+            dbc.Alert([
+                html.P("要使用您的域名发送邮件，您需要将域名的 MX 记录指向我们的邮件服务器。请按照以下步骤操作："),
+                html.Ol([
+                    html.Li(f"登录到您的域名注册商（例如 GoDaddy, Cloudflare, 阿里云等）的 DNS 管理界面。"),
+                    html.Li(f"找到您要添加的域名的 DNS 记录设置。"),
+                    html.Li(f"添加或修改 MX 记录，将其指向主机名： "),
+                    html.Code(f"{EXPECTED_MX_RECORD_HOST}"),
+                    html.Li(f"优先级通常设置为 10 或 0（具体取决于您的注册商）。"),
+                    html.Li(f"保存更改。DNS 记录可能需要几分钟到几小时才能在全球范围内生效。"),
+                    html.Li(f"在下方输入您的域名并点击 '添加域名'。系统将自动验证 MX 记录。")
+                ])
+            ], color="info", className="mb-3"),
             dbc.Input(id="domain-input", type="text", placeholder="输入要添加的域名", className="mb-3"),
             dbc.Button("添加域名", id="add-domain-button", color="primary", className="me-2"),
             html.Div(id="domain-output", className="mt-3"),
