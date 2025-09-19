@@ -20,7 +20,7 @@ services:
     build: ./postfix
     hostname: mail.example.com # Set a hostname for the mail server
     environment:
-      RELAYHOST: [your.external.smtp.relay]:587 # Replace with your actual external SMTP relay host
+      RELAYHOST: "[your.external.smtp.relay]:587" # Replace with your actual external SMTP relay host
       SMTP_USERNAME: your_smtp_username # Replace with your SMTP username
       SMTP_PASSWORD: your_smtp_password # Replace with your SMTP password
     volumes:
